@@ -1,0 +1,21 @@
+version: '3'
+services:
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    restart: unless-stopped
+    environment:
+	  - TERM=xterm
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+      - CHANGE_CONFIG_DIR_OWNERSHIP=true
+      - HOME=/config
+      - TZ=Europe/Dublin
+	  - PLEX_UID=1027
+	  - PLEX_GID=65536
+    network_mode: host
+    volumes:
+      - /volume1/docker/plex/Backup:/backup
+      - /volume1/docker/plex:/config
+      - /volume1/media:/data
+      - /volume1/docker/plex/Transcode:/transcode
