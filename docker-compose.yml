@@ -5,17 +5,22 @@ services:
     image: plexinc/pms-docker
     restart: unless-stopped
     environment:
-      - TERM=xterm
-      - LANG=C.UTF-8
-      - LC_ALL=C.UTF-8
-      - CHANGE_CONFIG_DIR_OWNERSHIP=true
-      - HOME=/config
-      - TZ=Europe/Dublin
-      - PLEX_UID=1027
-      - PLEX_GID=65536
+      TERM: xterm
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+      CHANGE_CONFIG_DIR_OWNERSHIP: true
+      TZ: Europe/Dublin
+      PLEX_UID: 1027
+      PLEX_GID: 65536
     network_mode: host
     volumes:
       - /volume1/docker/plex/Backup:/backup
       - /volume1/docker/plex:/config
       - /volume1/media:/data
       - /volume1/docker/plex/Transcode:/transcode
+    healthcheck:
+      test: curl --connect-timeout 15 --silent --show-error --fail http://localhost:32400/identity
+      interval: 1m00s
+      timeout: 15s
+      retries: 3
+      start_period: 1m00s
