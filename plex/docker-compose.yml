@@ -1,0 +1,23 @@
+version: '3'
+services:
+  plex:
+    container_name: plex
+    image: lscr.io/linuxserver/plex:latest
+    restart: unless-stopped
+    environment:
+      PUID: 1028
+      PGID: 65536
+      TZ: Europe/Dublin
+      VERSION: docker
+    network_mode: host
+    volumes:
+      - /volume1/docker/plex/Backup:/backup
+      - /volume1/docker/plex:/config
+      - /volume1/docker/plex:/transcode      
+      - /volume1/media:/data
+    healthcheck:
+      test: curl --connect-timeout 15 --silent --show-error --fail http://localhost:32400/identity
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 1m00s
